@@ -2,10 +2,15 @@
 namespace Album\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Paginator\Adapter\AdapterInterface;
 use Zend\View\Model\ViewModel;
 use Doctrine\ORM\EntityManager;
 use Album\Entity\Album;
 use Album\Form\AlbumForm;
+use Doctrine\ORM\Tools\Pagination\Paginator as Paginator;
+use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as PaginatorAdapter;
+use Zend\Paginator\Paginator as ZendPaginator;
+
 
 class AlbumController extends AbstractActionController
 {
@@ -30,7 +35,7 @@ class AlbumController extends AbstractActionController
         }
         return $this->em;
     }
-    
+
     /**
      * Index action displays a list of all the albums
      * 
@@ -38,9 +43,20 @@ class AlbumController extends AbstractActionController
      */
     public function indexAction()
     {
+        $page = (int) $this->params()->fromRoute('id');
+        $column = $this->params()->fromQuery('column');
+        $order = $this->params()->fromQuery('order');
+
+        $query = $this->getEntityManager()->getRepository('Album\Entity\Album')->findBy([], [], 5, $page*5);
+
+        //$paginator = new ZendPaginator(new PaginatorAdapter(new Paginator($query)));
+        //$paginator->setCurrentPageNumber($page);
+        //$paginator->setItemCountPerPage(5);
+
         return new ViewModel(
             array(
-                'albums' => $this->getEntityManager()->getRepository('Album\Entity\Album')->findAll() 
+                'albums' => $query,
+                'artists' => $this->getEntityManager()->getRepository('Artist\Entity\Artist')->findAll()
             )
         );
     }
@@ -48,6 +64,17 @@ class AlbumController extends AbstractActionController
     public function addAction()
     {
         $form = new AlbumForm();
+        $artists = array();
+        $fetchArtists = 
+            array(
+                $this->getEntityManager()->getRepository('Artist\Entity\Artist')->findAll() 
+            );
+        foreach($fetchArtists as $artist){
+            foreach($artist as $a){
+                $artists[$a->id] = $a->label;
+            }
+        }
+        $form->get('artist')->setValueOptions($artists);
         $form->get('submit')->setValue('Add');
 
         $request = $this->getRequest();

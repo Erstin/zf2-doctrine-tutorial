@@ -14,6 +14,8 @@ return array(
                 'params' => array(
                     'host'     => 'localhost',
                     'port'     => '3306',
+		    'user' => 'root',
+		    'password' => 'assessfirst',
                     'dbname'   => 'album_doctrine',
                 )
             )

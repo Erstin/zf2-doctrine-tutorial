@@ -1,10 +1,8 @@
 <?php
-namespace Album;
+namespace Artist;
 
-use Album\Model\Album;
-use Album\Model\AlbumTable;
-use Album\Model\Artist;
-use Album\Model\ArtistTable;
+use Artist\Model\Artist;
+use Artist\Model\ArtistTable;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 
@@ -28,16 +26,16 @@ class Module
     {
         return array(
             'factories' => array(
-                'Album\Model\AlbumTable' =>  function($sm) {
-                    $tableGateway = $sm->get('AlbumTableGateway');
-                    $table = new AlbumTable($tableGateway);
+                'Artist\Model\ArtistTable' =>  function($sm) {
+                    $tableGateway = $sm->get('ArtistTableGateway');
+                    $table = new ArtistTable($tableGateway);
                     return $table;
                 },
-                'AlbumTableGateway' => function ($sm) {
+                'ArtistTableGateway' => function ($sm) {
                     $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
                     $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Album());
-                    return new TableGateway('album', $dbAdapter, null, $resultSetPrototype);
+                    $resultSetPrototype->setArrayObjectPrototype(new Artist());
+                    return new TableGateway('Artist', $dbAdapter, null, $resultSetPrototype);
                 },
             ),
         );

@@ -1,6 +1,6 @@
 <?php
 
-namespace Album\Entity;
+namespace Artist\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Zend\InputFilter\InputFilter;
@@ -9,15 +9,14 @@ use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface; 
 
 /**
- * A music album.
+ * A music Artist.
  *
  * @ORM\Entity
- * @ORM\Table(name="album")
- * @property string $artist
- * @property string $title
+ * @ORM\Table(name="Artist")
+ * @property string $label
  * @property int $id
  */
-class Album implements InputFilterAwareInterface 
+class Artist implements InputFilterAwareInterface 
 {
     protected $inputFilter;
 
@@ -29,17 +28,9 @@ class Album implements InputFilterAwareInterface
     protected $id;
 
     /**
-     * @ORM\Column(type="integer")
-     * One Album has One Artist.
-     * @ORM\ManyToOne(targetEntity="Artist")
-     * @ORM\JoinColumn(name="artist", referencedColumnName="label")
-     */
-    protected $artist;
-
-    /**
      * @ORM\Column(type="string")
      */
-    protected $title;
+    protected $label;
 
     /**
      * Magic getter to expose protected properties.
@@ -73,16 +64,6 @@ class Album implements InputFilterAwareInterface
         return get_object_vars($this);
     }
 
-    public function setArtist(Artist $artist) {
-        $this->artist = $artist;
-
-        return $this;
-    }
-
-    public function getArtist(){
-        return $this->artist;
-    }
-
     /**
      * Populate from an array.
      *
@@ -91,8 +72,7 @@ class Album implements InputFilterAwareInterface
     public function populate($data = array()) 
     {
         $this->id = $data['id'];
-        $this->artist = $data['artist'];
-        $this->title = $data['title'];
+        $this->label = $data['label'];
     }
 
     public function setInputFilter(InputFilterInterface $inputFilter)
@@ -116,15 +96,7 @@ class Album implements InputFilterAwareInterface
             )));
 
             $inputFilter->add($factory->createInput(array(
-                'name'     => 'artist',
-                'required' => true,
-                'filters' => array(
-                    array('name'    => 'Int'),
-                ),
-            )));
-
-            $inputFilter->add($factory->createInput(array(
-                'name'     => 'title',
+                'name'     => 'label',
                 'required' => true,
                 'filters'  => array(
                     array('name' => 'StripTags'),
@@ -146,5 +118,5 @@ class Album implements InputFilterAwareInterface
         }
 
         return $this->inputFilter;
-    }
+    } 
 }

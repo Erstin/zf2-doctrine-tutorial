@@ -8,7 +8,6 @@ $this->headTitle($title);
 <p>
     <a href="<?php echo $this->url('album', array('action'=>'add'));?>">Add new album</a>
 </p>
-
 <table class="table">
 <tr>
     <th>Title</th>
@@ -18,7 +17,11 @@ $this->headTitle($title);
 <?php foreach ($albums as $album) : ?>
 <tr>
     <td><?php echo $this->escapeHtml($album->title);?></td>
-    <td><?php echo $this->escapeHtml($album->artist);?></td>
+<?php foreach ($artists as $artist) : ?>
+    <?php if($album->artist == $artist->id){?>
+    <td><?php echo $this->escapeHtml($artist->label);?></td>
+    <?php }?>
+<?php endforeach; ?>
     <td>
         <a href="<?php echo $this->url('album',
             array('action'=>'edit', 'id' => $album->id));?>">Edit</a>

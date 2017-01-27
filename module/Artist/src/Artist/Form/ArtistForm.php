@@ -1,14 +1,14 @@
 <?php
-namespace Album\Form;
+namespace Artist\Form;
 
 use Zend\Form\Form;
 
-class AlbumForm extends Form
+class ArtistForm extends Form
 {
     public function __construct($name = null)
     {
         // we want to ignore the name passed
-        parent::__construct('album');
+        parent::__construct('Artist');
         $this->setAttribute('method', 'post');
         $this->add(array(
             'name' => 'id',
@@ -17,20 +17,12 @@ class AlbumForm extends Form
             ),
         ));
         $this->add(array(
-            'name' => 'artist',
-            'type'  => 'Zend\Form\Element\Select',
-            'options' => array(
-                'label' => 'Artist',
-                'empty_option' => 'Please choose an artist',
-            ),
-        ));
-        $this->add(array(
-            'name' => 'title',
+            'name' => 'label',
             'attributes' => array(
                 'type'  => 'text',
             ),
             'options' => array(
-                'label' => 'Title',
+                'label' => 'Label',
             ),
         ));
         $this->add(array(
